@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 
 # Determine the mode to be used and get the database name
@@ -17,6 +18,23 @@ def setup():
         else:
             print("Invalid database name, please ensure you have no leading or trailing characters")
     return database_name, mode
+
+# Parse the input file name and ensure it ends in .db and has no spaces
+def parseDBName(database_name):
+    return_string = database_name.strip()
+    if return_string.find(".db") == -1:
+        return_string += ".db"
+    return return_string
+
+
+# Create a new database file if requested
+def createNewDatabase(mode, database_name):
+    if os.path.exists(database_name):
+        os.remove(database_name)
+        
+    new_db = open(database_name, "x")
+    new_db.close()
+
     
 
 
@@ -26,6 +44,23 @@ if __name__ == "__main__":
     print("Welcome to sqlite starter!")
     database_name, mode = setup()
     print()
+
+    # Ensure they didn't add the '.db' to the input file
+    database_name = parseDBName(database_name)
+
+    # Create a database if needed
+    if mode == 0:
+        createNewDatabase(mode, database_name)
+    
+    # Connect to the database and get a cursor
+    conn = sqlite3.connect(database_name)
+    c = conn.cursor()
+
+    # Commit to the db and close the connection
+    conn.commit()
+    conn.close()
+
+
 
 
 
