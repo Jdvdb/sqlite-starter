@@ -36,7 +36,13 @@ def createNewDatabase(mode, database_name):
     new_db.close()
 
     
-
+def printHelp():
+    print("\nHelp: here are the available commands (but exclude the quotation marks)")
+    print("Create table: 'create'")
+    print("Get columns of a table: 'cols")
+    print("Add an item: 'item'")
+    print("Add items from document: 'document'")
+    print("Quit the program: 'exit'")
 
 
 if __name__ == "__main__":
@@ -55,6 +61,25 @@ if __name__ == "__main__":
     # Connect to the database and get a cursor
     conn = sqlite3.connect(database_name)
     c = conn.cursor()
+
+    # Setup Main Loop
+    running = True
+
+    while running:
+        print()
+        print("Please type in a command!")
+        print("Note: use 'help' to see a list of options")
+        selection = input().lower()
+
+        if selection == 'help':
+            printHelp()
+        elif selection == 'exit':
+            print("Take Care :)")
+            running = False
+        else:
+            print("Error: Invalid command '{}' used.".format(selection))
+        
+
 
     # Commit to the db and close the connection
     conn.commit()
