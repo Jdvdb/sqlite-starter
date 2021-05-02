@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-
 # Determine the mode to be used and get the database name
 def setup():
     valid_mode = False
@@ -53,10 +52,13 @@ def createTable():
     print(att_null)
     print(primary_atts)
     print(foreign_atts)
+    query = createTableString(name, num_attributes, att_names, att_types, att_null, primary_atts, foreign_atts)
+    print(query)
+
 
 # Get all of the information from the user about the table
 def readTableInfo():
-    table_name = input("Please enter the table name: ")
+    table_name = input("Please enter the table name: ").strip()
     num_attributes = int(input("How many attributes will it have: "))
     attributes = []
     print("Please enter in the attributes as specified in the README")
@@ -81,21 +83,49 @@ def parseTableReadInfo(attributes):
         # do the following checks if there are enough vals
         if len(components) > 2:
             # determine if the value can be null
-            if components[2].lower() == 'nn' or components[2].lower() == 'prim':
+            if components[2].lower() == 'nn' or components[2].lower() == 'pk':
                 att_null.append(False)
             else:
                 att_null.append(True)
             
             # add this to the primary key if applicable
-            if components[2].lower() == 'prim':
+            if components[2].lower() == 'pk':
                 primary_atts.append(len(att_names) - 1)
 
             # recognize this as a foreign key if applicable
-            if components[2].lower() == 'for':
+            if components[2].lower() == 'fk':
                 foreign_atts.append((len(att_names) - 1, components[3], components[4]))
 
     return att_names, att_type, att_null, primary_atts, foreign_atts
     
+def createTableString(table_name, num_attributes, att_names, att_types, att_null, primary_atts, foreign_atts):
+    # query string that will be returned
+    query = "CREATE TABLE {} (".format(table_name)
+
+    # add each attribute and name to the query
+    for i in range(num_attributes):
+        query += "{} {}".format(att_names[i], att_types[i].upper())
+        if not (att_null[i]):
+            query += " NOT NULL"
+        query += ", "
+    
+    # create the primary key
+    if len(primary_atts) > 1:
+        query += "PRIMARY KEY ("
+        for index in primary_atts:
+            query += "{}, ".format(att_names[index])
+        # chop off the extra comma and space
+        query = query[:-2] + "),"
+    else:
+        query += "PRIMARY KEY({}), ".format(att_names[primary_atts[0]])
+
+    # create the foreign keys
+    for key in foreign_atts:
+        query += "FOREIGN KEY({}) REFERENCES {} ({}) ON DELETE CASCADE ON UPDATE NO ACTION, ".format(key[0], key[1], key[2])
+
+    # clean up the end of the string
+    query = query[:-2] + ");"
+    return query
 
 def getColumns():
     print("Getting Cols")
@@ -128,6 +158,7 @@ if __name__ == "__main__":
 
     # Setup Main Loop
     running = True
+    print("Database connected!")
 
     while running:
         print()

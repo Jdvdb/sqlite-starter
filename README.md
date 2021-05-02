@@ -16,24 +16,24 @@ The next line of input will be the number of attributes in this table (e.g: `3`)
 
 After this, you will be prompted to enter information for each attribute.
 You can use the following keywords for the datatypes:
-`int` - INTEGER
+`integer` - INTEGER
 `real` - REAL
 `text` - TEXT
 `blob` - BLOB
 
 The status refers to if this is a key or a null value.
 You can use the following keywords for the status:
-`prim` - PRIMARY KEY
+`pk` - PRIMARY KEY
 `nn` - NOT NULL
-`for (_,_)` - FOREIGN KEY
+`fk _ _` - FOREIGN KEY
 
 N.B. Using a foreign key requires additional input.
 If you wanted it to reference `id` in `table`, use the command as follows:
-`foreign_key_name int for (id,table)`
+`foreign_key_name integer fk table id`
 
 N.B You can also use multiple attributes for a primary key as follows:
-`id int prim`
-`name text prim`
+`id integer pk`
+`name text pk`
 
 
 Each attribute should be given in the following style: `att_name type status`
@@ -41,8 +41,8 @@ Each attribute should be given in the following style: `att_name type status`
 Here is an example table creation input for student records:
 `students`
 `3`
-`id int prim`
+`id integer pk`
 `name Text nn`
-`num_friends int`
+`num_friends integer`
 
 ### Get Columns
