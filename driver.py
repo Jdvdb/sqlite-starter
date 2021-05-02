@@ -40,9 +40,21 @@ def printHelp():
     print("\nHelp: here are the available commands (but exclude the quotation marks)")
     print("Create table: 'create'")
     print("Get columns of a table: 'cols")
-    print("Add an item: 'item'")
-    print("Add items from document: 'document'")
+    print("Add an item to a table: 'item'")
+    print("Add items from document to a table: 'document'")
     print("Quit the program: 'exit'")
+
+def createTable():
+    print("Creating Table")
+
+def getColumns():
+    print("Getting Cols")
+
+def addItem():
+    print("Adding One Row")
+
+def AddDocument():
+    print("Adding all items from a document")
 
 
 if __name__ == "__main__":
@@ -73,6 +85,14 @@ if __name__ == "__main__":
 
         if selection == 'help':
             printHelp()
+        elif selection == 'create':
+            createTable()
+        elif selection == 'cols':
+            getColumns()
+        elif selection == 'item':
+            addItem()
+        elif selection == 'document':
+            AddDocument()
         elif selection == 'exit':
             print("Take Care :)")
             running = False
