@@ -44,15 +44,55 @@ def printHelp():
     print("Add items from document to a table: 'document'")
     print("Quit the program: 'exit'")
 
+# Function that will get info for the table and create it
 def createTable():
-    print("Creating Table")
+    name, num_attributes, attributes = readTableInfo()
+
+# Get all of the information from the user about the table
+def readTableInfo():
     table_name = input("Please enter the table name: ")
-    num_attributes = input("How many attributes will it have: ")
+    num_attributes = int(input("How many attributes will it have: "))
     attributes = []
     print("Please enter in the attributes as specified in the README")
     for i in range(num_attributes):
         temp_attribute = input("Attribute: ")
         attributes.append(temp_attribute)
+    return table_name, num_attributes, attributes
+
+# Breakdown the table input to be converted to SQLite
+def parseTableReadInfo(attributes):
+    att_names = []
+    att_type = []
+    att_null = []
+    primary_atts = []
+    foreign_atts = []
+    for att in attributes:
+        components = att.split()
+        # get the name and type of each attribute first
+        att_names.append(components[0])
+        att_type.append(components[1])
+
+        # determine if the value can be null
+        if components[2] == 'nn':
+            att_null.append(False)
+        else:
+            att_null.append(True)
+        
+        # add this to the primary key if applicable
+        if components[2] == 'prim':
+            primary_atts.append(len(att_names) - 1)
+
+        # recognize this as a foreign key if applicable
+        if components[2] == 'for':
+            foreign_atts.append((len(att_names) - 1, components[3], components[4]))
+
+    return att_names, att_type, att_null, primary_atts, foreign_atts
+    
+        
+
+
+
+    
 
 def getColumns():
     print("Getting Cols")
@@ -111,14 +151,3 @@ if __name__ == "__main__":
     # Commit to the db and close the connection
     conn.commit()
     conn.close()
-
-
-
-
-
-
-
-
-    
-
-        

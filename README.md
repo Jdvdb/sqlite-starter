@@ -29,7 +29,12 @@ You can use the following keywords for the status:
 
 N.B. Using a foreign key requires additional input.
 If you wanted it to reference `id` in `table`, use the command as follows:
-`foreign_key_name int for (id, table)`
+`foreign_key_name int for (id,table)`
+
+N.B You can also use multiple attributes for a primary key as follows:
+`id int prim`
+`name text prim`
+
 
 Each attribute should be given in the following style: `att_name type status`
 
