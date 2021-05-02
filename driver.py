@@ -47,6 +47,12 @@ def printHelp():
 # Function that will get info for the table and create it
 def createTable():
     name, num_attributes, attributes = readTableInfo()
+    att_names, att_types, att_null, primary_atts, foreign_atts = parseTableReadInfo(attributes)
+    print(att_names)
+    print(att_types)
+    print(att_null)
+    print(primary_atts)
+    print(foreign_atts)
 
 # Get all of the information from the user about the table
 def readTableInfo():
@@ -70,28 +76,25 @@ def parseTableReadInfo(attributes):
         components = att.split()
         # get the name and type of each attribute first
         att_names.append(components[0])
-        att_type.append(components[1])
+        att_type.append(components[1].lower())
 
-        # determine if the value can be null
-        if components[2] == 'nn':
-            att_null.append(False)
-        else:
-            att_null.append(True)
-        
-        # add this to the primary key if applicable
-        if components[2] == 'prim':
-            primary_atts.append(len(att_names) - 1)
+        # do the following checks if there are enough vals
+        if len(components) > 2:
+            # determine if the value can be null
+            if components[2].lower() == 'nn' or components[2].lower() == 'prim':
+                att_null.append(False)
+            else:
+                att_null.append(True)
+            
+            # add this to the primary key if applicable
+            if components[2].lower() == 'prim':
+                primary_atts.append(len(att_names) - 1)
 
-        # recognize this as a foreign key if applicable
-        if components[2] == 'for':
-            foreign_atts.append((len(att_names) - 1, components[3], components[4]))
+            # recognize this as a foreign key if applicable
+            if components[2].lower() == 'for':
+                foreign_atts.append((len(att_names) - 1, components[3], components[4]))
 
     return att_names, att_type, att_null, primary_atts, foreign_atts
-    
-        
-
-
-
     
 
 def getColumns():
@@ -116,7 +119,9 @@ if __name__ == "__main__":
     # Create a database if needed
     if mode == 0:
         createNewDatabase(mode, database_name)
-    
+    else:
+        if not os.path.exists(database_name):
+            print("Database '{}' does not yet exist. Creating it now".format(database_name))
     # Connect to the database and get a cursor
     conn = sqlite3.connect(database_name)
     c = conn.cursor()
