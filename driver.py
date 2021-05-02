@@ -46,6 +46,13 @@ def printHelp():
 
 def createTable():
     print("Creating Table")
+    table_name = input("Please enter the table name: ")
+    num_attributes = input("How many attributes will it have: ")
+    attributes = []
+    print("Please enter in the attributes as specified in the README")
+    for i in range(num_attributes):
+        temp_attribute = input("Attribute: ")
+        attributes.append(temp_attribute)
 
 def getColumns():
     print("Getting Cols")
