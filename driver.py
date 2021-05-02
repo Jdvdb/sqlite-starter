@@ -129,8 +129,18 @@ def createTableString(table_name, num_attributes, att_names, att_types, att_null
     query = query[:-2] + ");"
     return query
 
-def getColumns():
-    print("Getting Cols")
+def getColumns(cursor):
+    # get the name of the table you want the columns for
+    table_name = input("Please enter the name of the table: ")
+
+    # query to find the column names
+    cursor.execute("PRAGMA table_info({})".format(table_name))
+    data = cursor.fetchall()
+
+    # print out the column info nicely
+    print("Here is the column info for the table '{}':".format(table_name))
+    for item in data:
+        print("Name: {} | Type: {} | Can be null: {} | Default value: {} | Primary Key: {}".format(item[1], item[2], not bool(item[3]), item[4], bool(item[5])))
 
 def addItem():
     print("Adding One Row")
@@ -173,7 +183,7 @@ if __name__ == "__main__":
         elif selection == 'create':
             createTable(c)
         elif selection == 'cols':
-            getColumns()
+            getColumns(c)
         elif selection == 'item':
             addItem()
         elif selection == 'document':
