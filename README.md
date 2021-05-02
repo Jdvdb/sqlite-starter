@@ -25,7 +25,7 @@ The status refers to if this is a key or a null value.
 You can use the following keywords for the status:
 `pk` - PRIMARY KEY
 `nn` - NOT NULL
-`fk _ _` - FOREIGN KEY
+`fk __ __` - FOREIGN KEY
 
 N.B. Using a foreign key requires additional input.
 If you wanted it to reference `id` in `table`, use the command as follows:

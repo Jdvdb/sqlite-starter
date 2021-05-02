@@ -44,7 +44,7 @@ def printHelp():
     print("Quit the program: 'exit'")
 
 # Function that will get info for the table and create it
-def createTable():
+def createTable(cursor):
     name, num_attributes, attributes = readTableInfo()
     att_names, att_types, att_null, primary_atts, foreign_atts = parseTableReadInfo(attributes)
     print(att_names)
@@ -54,6 +54,8 @@ def createTable():
     print(foreign_atts)
     query = createTableString(name, num_attributes, att_names, att_types, att_null, primary_atts, foreign_atts)
     print(query)
+    cursor.execute(query)
+
 
 
 # Get all of the information from the user about the table
@@ -169,7 +171,7 @@ if __name__ == "__main__":
         if selection == 'help':
             printHelp()
         elif selection == 'create':
-            createTable()
+            createTable(c)
         elif selection == 'cols':
             getColumns()
         elif selection == 'item':
