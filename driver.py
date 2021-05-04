@@ -142,10 +142,44 @@ def getColumns(cursor):
     for item in data:
         print("Name: {} | Type: {} | Can be null: {} | Default value: {} | Primary Key: {}".format(item[1], item[2], not bool(item[3]), item[4], bool(item[5])))
 
-def addItem():
-    print("Adding One Row")
+def addItem(cursor):
+    # get the name of the table you want the columns for
+    table_name = input("Please enter the name of the table: ")
 
-def AddDocument():
+    # query to find the column names
+    cursor.execute("PRAGMA table_info({})".format(table_name))
+    data = cursor.fetchall()
+
+    # prompt an input for each value
+    values = []
+    types = []
+    for item in data:
+        values.append(input("Please enter a value for {} (type {}): ".format(item[1], item[2])))
+        types.append(item[2])
+
+    # create query string
+    query = createItemInsert(values, types, table_name)
+
+    print(query)
+
+    # insert the values into the table
+    c.execute(query)
+
+    print("Item Successfully Inserted!")
+
+def createItemInsert(values, types, table_name):
+    query = "INSERT INTO {} VALUES(".format(table_name)
+    for i in range(len(values)):
+        if types[i] == "TEXT":
+            query += "'{}', ".format(values[i])
+        else:
+            query += "{}, ".format(values[i])
+    query = query[:-2] + ");"
+
+    return query
+
+
+def AddDocument(cursor):
     print("Adding all items from a document")
 
 
@@ -185,9 +219,9 @@ if __name__ == "__main__":
         elif selection == 'cols':
             getColumns(c)
         elif selection == 'item':
-            addItem()
+            addItem(c)
         elif selection == 'document':
-            AddDocument()
+            AddDocument(c)
         elif selection == 'exit':
             print("Take Care :)")
             running = False
