@@ -160,8 +160,6 @@ def addItem(cursor):
     # create query string
     query = createItemInsert(values, types, table_name)
 
-    print(query)
-
     # insert the values into the table
     c.execute(query)
 
@@ -180,8 +178,32 @@ def createItemInsert(values, types, table_name):
 
 
 def AddDocument(cursor):
-    print("Adding all items from a document")
+    # get the name of the table you want the columns for
+    table_name = input("Please enter the name of the table: ")
 
+    # get the file name they want to use
+    file_name = input("Please enter the name of the file you will use (and include pathing if applicable: ")
+
+    # validate that this file exists and is of the proper type
+    if not validateFile(file_name):
+        return
+
+    # get the deliminater for the file
+    deliminater = input("Please enter the deliminater: ")
+
+def validateFile(file_name):
+    # ensure the file given is a .csv or .txt
+    if file_name[-4:] != ".csv" and file_name[-4:] != ".txt":
+        print("Error: Ensure data entry is a .csv or .txt file type")
+        return False
+
+    # test to see if file is found
+    if not os.path.exists(file_name):
+        print("Error: The file can not be found. Ensure you properly gave the directory")
+        return False
+
+    # else return True
+    return True
 
 if __name__ == "__main__":
     # Display the startup menu with options
